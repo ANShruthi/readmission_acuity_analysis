@@ -1,5 +1,3 @@
-# readmission_acuity_analysis
-Claims-style acuity proxy model predicting 30-day diabetic readmission risk, with decision-threshold sensitivity and economic net-benefit analysis. Built on real UCI hospital data (101,766 encounters).
 # Real-World Readmission Risk Analytics: Acuity Proxies & Economic Threshold Sensitivity
 
 A claims-style readmission risk framework built on **real, publicly available inpatient
@@ -37,7 +35,7 @@ data with external cost benchmarks when claims-level cost data isn't available.
 
 - Cohort: 69,964 encounters after excluding newborns, in-hospital deaths, and hospice
   discharges (from 71,518 unique-patient encounters).
-- 30-day readmission rate in cohort: **9.0%**
+- 30-day readmission rate in cohort: **8.97%**
 - Model discrimination: **ROC-AUC 0.586**, PR-AUC (average precision) 0.120 —
   modest, and honestly reported. This reflects a real, well-documented limitation
   of claims/EHR-derived acuity proxies alone: they capture *some* readmission
@@ -50,6 +48,32 @@ data with external cost benchmarks when claims-level cost data isn't available.
   because the model's sensitivity drops off sharply above a ~0.20 probability
   cutoff, program-level "net savings" (under the illustrative cost assumptions)
   concentrate almost entirely in the lowest-threshold, highest-sensitivity range.
+
+## Figures
+
+### Model Discrimination: ROC & Precision-Recall Curves
+![ROC and Precision-Recall Curves](reports/figures/roc_pr_curves.png)
+
+The model performs modestly better than chance (ROC-AUC 0.586). The
+precision-recall curve reflects the class imbalance in the data (~9% base
+readmission rate) — precision stays low across most of the recall range,
+consistent with the limited discriminative power of acuity proxies alone.
+
+### Adjusted Odds Ratios: Acuity Proxies vs. 30-Day Readmission
+![Acuity Odds Ratios](reports/figures/acuity_odds_ratios.png)
+
+Prior inpatient utilization and diagnosis burden show the strongest positive
+association with 30-day readmission. Notably, polypharmacy and poor glycemic
+control were not independently predictive once other acuity factors were
+controlled for.
+
+### Estimated Program Net Savings Across Decision Thresholds
+![Threshold Sensitivity Curve](reports/figures/threshold_sensitivity_curve.png)
+
+Under the illustrative cost assumptions, estimated net savings from a
+hypothetical outreach program are concentrated almost entirely at low
+probability thresholds and collapse to near-zero above ~0.20, driven by the
+model's sharp drop in sensitivity at higher cutoffs.
 
 ## Repository Structure
 ```
